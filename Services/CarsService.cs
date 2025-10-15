@@ -49,4 +49,30 @@ public class CarsService
     List<Car> cars = _repository.GetCars();
     return cars;
   }
+
+  internal Car UpdateCar(int carId, Car carData, Account userInfo)
+  {
+    Car car = GetCarById(carId);
+
+    if (car.CreatorId != userInfo.Id)
+    {
+      throw new Exception($"YOU CANNOT ALTER SOMEONE ELSE'S DATA YOU BIG STUPID IDIOT. I AM GIVING YOUR EMAIL TO THE AUTHORITIES. YOUR EMAIL IS {userInfo.Email}. I HAVE IT AND YOU ARE IN BIG TROUBLE, BUSTER");
+    }
+
+    car.Make = carData.Make ?? car.Make;
+    car.Model = carData.Model ?? car.Model;
+    car.Color = carData.Color ?? car.Color;
+    // NOTE property must be nullable in model for this check to work
+    car.Year = carData.Year ?? car.Year;
+    car.Mileage = carData.Mileage ?? car.Mileage;
+    car.ImgUrl = carData.ImgUrl ?? car.ImgUrl;
+    // NOTE property must be nullable in model for this check to work
+    car.HasCleanTitle = carData.HasCleanTitle ?? car.HasCleanTitle;
+    car.EngineType = carData.EngineType ?? car.EngineType;
+    car.Description = carData.Description ?? carData.Description;
+
+    _repository.UpdateCar(car);
+
+    return car;
+  }
 }

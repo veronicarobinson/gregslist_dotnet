@@ -67,7 +67,7 @@ public class CarsRepository
 
   internal void DeleteCar(int carId)
   {
-    string sql = "DELETE FROM cars WHERE id = @CarId;";
+    string sql = "DELETE FROM cars WHERE id = @CarId LIMIT 1;";
 
     object param = new { CarId = carId };
 
@@ -126,5 +126,30 @@ public class CarsRepository
       }).ToList();
 
     return cars;
+  }
+
+  internal void UpdateCar(Car carData)
+  {
+    string sql = @"
+    UPDATE cars
+    SET
+    make = @Make,
+    model = @Model,
+    year = @Year,
+    price = @Price,
+    color = @Color,
+    img_url = @ImgUrl,
+    mileage = @Mileage,
+    engine_type = @EngineType,
+    has_clean_title = @HasCleanTitle,
+    description = @Description
+    WHERE id = @Id LIMIT 1;";
+
+    int rowsAffected = _db.Execute(sql, carData);
+
+    if (rowsAffected != 1)
+    {
+      throw new Exception(rowsAffected + " rows of data are now updated and that is not good!");
+    }
   }
 }

@@ -7,10 +7,10 @@ public class CarsController : ControllerBase
   private readonly CarsService _carsService;
   private readonly Auth0Provider _auth;
 
-  public CarsController(CarsService carsService, Auth0Provider auth0Provider)
+  public CarsController(CarsService carsService, Auth0Provider auth)
   {
     _carsService = carsService;
-    _auth = auth0Provider;
+    _auth = auth;
   }
 
   [HttpGet("test")]
@@ -60,6 +60,21 @@ public class CarsController : ControllerBase
       carData.CreatorId = userInfo.Id;
       Car car = _carsService.CreateCar(carData);
       return Ok(car);
+    }
+    catch (Exception exception)
+    {
+      return BadRequest(exception.Message);
+    }
+  }
+
+  [HttpDelete("{carId}"), Authorize]
+  public async Task<ActionResult<string>> DeleteCar(int carId)
+  {
+    try
+    {
+      Account userInfo = await _auth.GetUserInfoAsync<Account>(HttpContext);
+      string message = _carsService.DeleteCar(carId, userInfo);
+      return Ok(message);
     }
     catch (Exception exception)
     {

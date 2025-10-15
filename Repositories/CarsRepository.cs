@@ -1,6 +1,7 @@
 
 
 
+
 namespace gregslist_api_dotnet.Repositories;
 
 public class CarsRepository
@@ -62,6 +63,20 @@ public class CarsRepository
       carData).SingleOrDefault();
 
     return car;
+  }
+
+  internal void DeleteCar(int carId)
+  {
+    string sql = "DELETE FROM cars WHERE id = @CarId;";
+
+    object param = new { CarId = carId };
+
+    int rowsAffected = _db.Execute(sql, param);
+
+    if (rowsAffected != 1)
+    {
+      throw new Exception(rowsAffected + " rows of data are now gone and that is not good!");
+    }
   }
 
   internal Car GetCarById(int carId)

@@ -91,3 +91,12 @@ FROM
   INNER JOIN accounts ON cars.creator_id = accounts.id
 ORDER BY
   cars.id;
+
+SELECT
+  cars.*,
+  accounts.*
+FROM
+  cars
+  JOIN accounts ON accounts.id = cars.creator_id
+WHERE
+  cars.id = 1;

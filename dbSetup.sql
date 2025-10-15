@@ -82,3 +82,12 @@ SELECT
   *
 FROM
   cars;
+
+SELECT
+  cars.*,
+  accounts.*
+FROM
+  cars
+  INNER JOIN accounts ON cars.creator_id = accounts.id
+ORDER BY
+  cars.id;

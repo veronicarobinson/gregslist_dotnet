@@ -19,4 +19,5 @@ public class Car
   [Range(0, 1000000)] public int Mileage { get; set; }
   public bool HasCleanTitle { get; set; }
   public string CreatorId { get; set; }
+  public Account Creator { get; set; }
 }

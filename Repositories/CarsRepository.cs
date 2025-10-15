@@ -23,7 +23,7 @@ public class CarsRepository
 
     List<Car> cars = _db.Query(
       sql,
-      (Car car, Account account) =>
+      (Car car, Profile account) =>
       {
         car.Creator = account;
         return car;

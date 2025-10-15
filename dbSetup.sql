@@ -13,6 +13,8 @@ CREATE TABLE
 CREATE TABLE
   cars (
     id INT PRIMARY KEY AUTO_INCREMENT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     make VARCHAR(50) NOT NULL,
     model VARCHAR(100) NOT NULL,
     `year` SMALLINT UNSIGNED NOT NULL,
@@ -26,6 +28,8 @@ CREATE TABLE
     creator_id VARCHAR(255) NOT NULL,
     FOREIGN KEY (creator_id) REFERENCES accounts (id) ON DELETE CASCADE
   );
+
+DROP TABLE cars;
 
 INSERT INTO
   cars (
@@ -58,7 +62,7 @@ VALUES
   (
     'mazda',
     'miata',
-    1997,
+    1996,
     8000,
     'https://images.unsplash.com/photo-1552615526-40e47a79f9d7?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWlhdGF8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=500',
     NULL,
@@ -68,3 +72,13 @@ VALUES
     TRUE,
     '65f87bc1e02f1ee243874743'
   );
+
+-- NOTE because of the ON DELETE CASCADE, if someone's account gets deleted it also deletes all of their cars
+DELETE FROM accounts
+WHERE
+  id = '670ff93326693293c631476f';
+
+SELECT
+  *
+FROM
+  cars;

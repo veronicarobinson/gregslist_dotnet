@@ -1,5 +1,6 @@
 
 
+
 namespace gregslist_api_dotnet.Repositories;
 
 public class CarsRepository
@@ -9,6 +10,58 @@ public class CarsRepository
   public CarsRepository(IDbConnection db)
   {
     _db = db;
+  }
+
+  internal Car CreateCar(Car carData)
+  {
+    string sql = @"
+    INSERT INTO
+      cars 
+      (
+      make,
+      model,
+      `year`,
+      price,
+      img_url,
+      description,
+      engine_type,
+      color,
+      mileage,
+      has_clean_title,
+      creator_id
+      )
+    VALUES
+      (
+      @Make,
+      @Model,
+      @Year,
+      @Price,
+      @ImgUrl,
+      @Description,
+      @EngineType,
+      @Color,
+      @Mileage,
+      @HasCleanTitle,
+      @CreatorId
+      );
+      
+      SELECT
+        cars.*,
+        accounts.*
+      FROM cars
+      JOIN accounts ON cars.creator_id = accounts.id
+      WHERE cars.id = LAST_INSERT_ID();";
+
+    Car car = _db.Query(
+      sql,
+      (Car car, Profile account) =>
+      {
+        car.Creator = account;
+        return car;
+      },
+      carData).SingleOrDefault();
+
+    return car;
   }
 
   internal Car GetCarById(int carId)
